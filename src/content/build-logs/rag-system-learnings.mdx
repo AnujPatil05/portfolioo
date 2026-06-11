@@ -1,0 +1,17 @@
+---
+slug: rag-system-learnings
+title: "The part of RAG that nobody talks about"
+date: "2024-11-20"
+context: "SmartDoc Query Engine"
+summary: "Building the retrieval layer was straightforward. Getting it to behave correctly under load, without making redundant calls or failing silently, was not."
+---
+
+When I built SmartDoc, the RAG pipeline itself took about a day. The retrieval logic, the embedding calls, the pgvector queries — that part was well-documented and not particularly surprising.
+
+What took the rest of the time was everything around it.
+
+**The embedding redundancy problem.** Every time a user queried a document, the system was re-embedding chunks that had already been indexed. For large documents with repeat users, this was expensive and slow. The fix was a Redis layer that checked for existing embeddings before calling the model. After adding it, redundant embedding calls dropped by ~65%. But the interesting part was identifying the problem — I only caught it by adding logging that tracked per-request embedding calls.
+
+**The silent failure problem.** The first version of SmartDoc had no observability. When the embedding model returned an unexpected output for an edge-case PDF (corrupted metadata, unusual encoding), the system would silently return an empty result. No error, no log, nothing. Adding Sentry with structured logging of parsing failures made these visible immediately. The system didn't get smarter — it just stopped hiding its failures.
+
+**What I learned:** in any AI pipeline, the retrieval and storage layer deserves the same engineering attention as the model. Maybe more. Models are relatively predictable. Infrastructure under load is not.

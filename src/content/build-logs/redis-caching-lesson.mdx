@@ -1,0 +1,17 @@
+---
+slug: redis-caching-lesson
+title: "What happens when you actually profile your endpoints"
+date: "2026-02-10"
+context: "Codologs / Spring Boot"
+summary: "Added Redis caching on high-frequency read endpoints and watched p95 latency drop from ~320ms to ~95ms. The lesson wasn't the caching — it was what I found when I looked."
+---
+
+At Codologs, I was asked to improve performance on a set of high-frequency read endpoints. The instinct was to reach for a cache immediately. But before writing a line of code, I profiled the routes.
+
+What I found: most of the latency wasn't computation — it was repeated database round-trips for identical queries being fired across separate requests within the same second. The same data, fetched again and again, because nothing was holding the result between calls.
+
+Redis was the right fix, but the learning wasn't *"use Redis"*. The learning was: **look before you cache**. A cache on top of a misdesigned query pattern just makes a bad pattern faster. In this case, the queries themselves were fine — the problem was purely the redundancy.
+
+After introducing Redis response caching on the affected endpoints, p95 latency dropped from approximately 320ms to approximately 95ms on cached routes. That's a 70% reduction. Not from a fancy algorithm — from eliminating work that didn't need to happen.
+
+**What I'd do differently:** instrument the endpoints before building anything, not after. The profile takes 10 minutes. It shapes every decision that follows.

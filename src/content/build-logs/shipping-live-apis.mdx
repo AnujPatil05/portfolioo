@@ -1,0 +1,17 @@
+---
+slug: shipping-live-apis
+title: "Why I deploy everything I build"
+date: "2026-03-01"
+context: "CodeEcoScan / SmartDoc / Changelog-AI"
+summary: "Three of my projects are live public APIs."
+---
+
+There's a specific kind of pressure that comes from knowing a real endpoint is live. Every design decision has a consequence. A slow query costs real milliseconds. A missing error handler produces a real 500. An undocumented field breaks a real integration.
+
+I started deploying everything: projects that stayed in development felt abstract.
+
+CodeEcoScan needed a sub-200ms response time because slow analysis tools don't get used. SmartDoc needed Redis caching because repeat queries on large documents were expensive, and I could feel it in the wait. Changelog-AI needed Sentry because I wasn't watching the logs manually — I needed the system to tell me when something broke.
+
+None of these were requirements from a spec. They were requirements that emerged from running real traffic against real systems.
+
+**The habit I've built:** before starting a project, decide where it's going to live.

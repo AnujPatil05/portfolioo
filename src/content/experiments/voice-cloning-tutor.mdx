@@ -1,0 +1,20 @@
+---
+slug: voice-cloning-tutor
+title: "AI Tutor with Voice Cloning"
+status: "completed"
+hypothesis: "Can LoRA fine-tuning and voice cloning combine to create a course-specific tutor that maintains both the instructor's knowledge domain and speaking style?"
+built: "A custom-trained AI tutor using LoRA fine-tuning on instructor-curated datasets, with RAG-based retrieval over ChromaDB. Integrated XTTS voice cloning so the tutor responds in the instructor's synthesised voice."
+stack: ["Python", "FastAPI", "LoRA", "XTTS", "ChromaDB", "RAG", "MLX", "Streamlit"]
+workedWell: "Context-window-managed prompt injection worked well for maintaining instructor tone across multi-turn conversations. The LoRA fine-tuning improved course-specific vocabulary recall measurably when evaluated on instructor-curated question sets. XTTS voice synthesis quality was surprisingly good for a 4-member team project."
+didntWork: "Voice synthesis latency was too high for real-time conversational use — averaging 3–6 seconds per response, which broke the conversational feel. Also, LoRA fine-tuning required careful hyperparameter tuning to avoid catastrophic forgetting on general knowledge outside the course material."
+nextStep: "Explore streaming voice synthesis to reduce perceived latency. Also worth investigating whether quantised model variants could reduce inference time without significantly degrading voice quality."
+year: 2025
+---
+
+The most technically interesting part of this project wasn't the voice synthesis — it was the tension between **specialisation** and **generalisation** in the fine-tuned model.
+
+When we fine-tuned on instructor course material, the model got better at course-specific questions. But it also got worse at adjacent questions that required general knowledge. The fine-tuning was pulling the model toward the training distribution at the cost of breadth.
+
+We partially addressed this with the RAG layer — letting the retrieval system handle course-specific facts while the base model handled reasoning. But the boundary between "course knowledge" and "general reasoning" is fuzzy, and we never found a clean separation.
+
+The voice cloning component worked, but it introduced a latency problem we underestimated. A 4-second wait is acceptable for a document query. It's not acceptable in a conversation. The lesson: **latency requirements are different for conversational interfaces than for query interfaces**. We designed the architecture as if it were a query system. It was actually a conversation system.

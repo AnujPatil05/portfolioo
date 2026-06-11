@@ -1,0 +1,19 @@
+---
+slug: hackathon-sprint
+title: "Building Agent Sentinel in under 24 hours"
+date: "2025-12-14"
+context: "Mumbai Hacks 2025 / Agent Sentinel"
+summary: "We had 24 hours, two people, and a misinformation detection pipeline to build from scratch. Here's what actually happened."
+---
+
+Mumbai Hacks 2025 was the first hackathon where I competed as a 2-person team. Most teams around us had 4–5 members. We decided not to scale the ambition down to match our headcount — which was probably the right call, in retrospect.
+
+The architecture we designed upfront: claim extraction → GDELT evidence retrieval → RoBERTa classification → structured verdict output with confidence scoring. Auto-publish high-confidence verdicts, route low-confidence ones to a human review queue.
+
+**What we got wrong first:** the GDELT API responses were inconsistent. Some queries returned rich news article data; others returned almost nothing for the same event type. We spent more time than we should have building a fallback strategy for sparse results before accepting that sparse was sometimes the correct answer.
+
+**What we got right:** keeping the pipeline stages cleanly separated. Because each stage was an isolated function call, we could test claim extraction independently from classification. When RoBERTa started producing anomalous confidence distributions on certain claim types, we could trace the problem to the classification stage without touching the retrieval logic.
+
+**The under-4-second runtime** wasn't planned — it emerged from the architecture. When each stage is small and purposeful, the pipeline is fast by default.
+
+**What I'd build next time:** better structured logging from the start. During the hackathon, debugging meant reading raw print statements. Not ideal at 3am.

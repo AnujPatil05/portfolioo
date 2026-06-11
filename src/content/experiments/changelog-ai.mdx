@@ -1,0 +1,18 @@
+---
+slug: changelog-ai
+title: "Changelog-AI"
+status: "completed"
+hypothesis: "Can an LLM reliably transform raw Git commit metadata into structured, user-readable release notes without requiring a rigid commit message format?"
+built: "An end-to-end NLP pipeline using Gemini models and LangChain that takes raw GitHub commit metadata and outputs structured, user-centric release notes. Deployed as a live public API on Railway."
+stack: ["Python", "LangChain", "Gemini API", "Railway", "Sentry"]
+workedWell: "The LLM was surprisingly good at inferring intent from terse commit messages. Even messages like 'fix stuff' and 'wip' were correctly grouped and summarised when given enough surrounding context. Sentry integration caught edge-case parsing failures that would have been invisible otherwise."
+didntWork: "Inconsistent output formatting when commits spanned multiple unrelated areas in the same push. The model would sometimes merge unrelated changes into a single changelog entry. Needed more explicit prompt engineering around scope boundaries."
+nextStep: "Add a preprocessing step that clusters commits by touched file paths before passing to the LLM. This should improve scope separation without requiring structured commit messages."
+year: 2026
+---
+
+The premise was simple: most developers write inconsistent commit messages. Most release note generators either require rigid formats (Conventional Commits) or produce vague summaries. I wanted to see if an LLM could bridge that gap — inferring structure from unstructured input.
+
+The experiment confirmed that the approach works, with caveats. The interesting finding was about **context window management**: giving the model 5–10 surrounding commits as context dramatically improved its ability to group related changes, even when individual messages were cryptic. Single-commit summaries were often too literal; grouped summaries were genuinely useful.
+
+The unsolved problem — scope mixing when commits touch unrelated areas — is a data preprocessing problem, not an LLM problem. The model is trying to be helpful by connecting related changes. But when "related" means "happened on the same day", that's not a useful grouping criterion.

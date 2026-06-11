@@ -1,0 +1,175 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+/* ─── Design Tokens ─────────────────────────────────────────────────────────── */
+
+@theme {
+  /* ── Canvas & Surfaces ─────────────────────────────────────────────────────
+     Warm beige-cream base. Cards sit on it like papers on a field desk.
+     High contrast: near-white cards (#FAFAF0) against the #F5F5DC canvas.
+     ──────────────────────────────────────────────────────────────────────── */
+  --color-canvas:           #F5F5DC;   /* classic beige — alive, editorial */
+  --color-surface:          #EAE6C8;   /* slightly deeper beige for insets */
+  --color-surface-raised:   #FAFAF0;   /* cream-white cards — float on canvas */
+
+  /* ── Text — warm, deep charcoal ───────────────────────────────────────────
+     Near-black with a warm brown undertone. Never cold gray.
+     ──────────────────────────────────────────────────────────────────────── */
+  --color-text-primary:     #1A0E00;   /* deep warm near-black */
+  --color-text-secondary:   #5A3C24;   /* warm sienna-brown */
+  --color-text-tertiary:    #8A6042;   /* warm medium brown */
+
+  /* ── Primary — Burnt Sienna / Coral-Red ───────────────────────────────────
+     The hero color. Used for hero rail, curiosity, contact, experiments.
+     Energetic but warm — editorial red, not alarming.
+     ──────────────────────────────────────────────────────────────────────── */
+  --color-teal-50:          #FDEDE9;   /* light sienna tint for chips */
+  --color-teal-500:         #E35336;   /* burnt sienna — primary accent */
+  --color-teal-600:         #C4421A;   /* deeper sienna */
+
+  /* ── Secondary — Sandy Brown ──────────────────────────────────────────────
+     Used for Selected Builds. Warm golden-amber energy.
+     ──────────────────────────────────────────────────────────────────────── */
+  --color-orange-50:        #FEF3E6;   /* light sandy tint */
+  --color-orange-500:       #F4A460;   /* sandy brown — secondary accent */
+  --color-orange-600:       #D4844A;   /* deeper sandy */
+
+  /* ── Deep — Sienna / Mahogany ─────────────────────────────────────────────
+     Used for Principles, Timeline, Build Logs. Anchoring and authoritative.
+     ──────────────────────────────────────────────────────────────────────── */
+  --color-indigo-50:        #F5E6D8;   /* light sienna tint */
+  --color-indigo-500:       #A0522D;   /* rich sienna-mahogany */
+  --color-indigo-600:       #884422;   /* deep mahogany */
+
+  /* ── Borders — warm tan, never cold gray ──────────────────────────────── */
+  --color-border:           #C8B88A;   /* warm tan */
+  --color-border-subtle:    #DDD0A8;   /* light warm tan */
+
+  /* ── Section Rail Strips ─────────────────────────────────────────────────
+     strip-teal   → Primary (Hero, Curiosity, Experiments, Contact): E35336
+     strip-orange → Secondary (Selected Builds): F4A460
+     strip-indigo → Deep (Logs, Principles, Timeline): A0522D
+     ──────────────────────────────────────────────────────────────────────── */
+  --strip-teal:             #E35336;
+  --strip-orange:           #F4A460;
+  --strip-indigo:           #A0522D;
+
+  /* ── Typography ───────────────────────────────────────────────────────── */
+  --font-display:           var(--font-domine, 'Domine', Georgia, serif);
+  --font-body:              var(--font-source-sans-3, 'Source Sans 3', sans-serif);
+  --font-mono:              var(--font-jetbrains-mono, 'JetBrains Mono', monospace);
+
+  /* ── Radius ───────────────────────────────────────────────────────────── */
+  --radius-card:            0.75rem;
+  --radius-badge:           0.25rem;
+  --radius-btn:             0.375rem;
+
+  /* ── Shadows — stronger on the beige canvas ──────────────────────────── */
+  --shadow-card:            0 1px 4px 0 rgb(0 0 0 / 0.09), 0 1px 2px -1px rgb(0 0 0 / 0.06);
+  --shadow-card-hover:      0 6px 20px 0 rgb(0 0 0 / 0.14), 0 2px 8px -2px rgb(0 0 0 / 0.08);
+}
+
+/* ─── Base Styles ────────────────────────────────────────────────────────────── */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: var(--color-canvas);
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
+  line-height: 1.65;
+}
+
+/* ─── Typography Base ─────────────────────────────────────────────────────────── */
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+}
+
+a {
+  color: var(--color-teal-500);
+  text-decoration: none;
+  transition: color 150ms ease;
+}
+
+a:hover {
+  color: var(--color-teal-600);
+}
+
+code, kbd, samp, pre {
+  font-family: var(--font-mono);
+}
+
+/* ─── Selection ──────────────────────────────────────────────────────────────── */
+
+::selection {
+  background-color: var(--color-teal-50);
+  color: var(--color-teal-600);
+}
+
+/* ─── Scrollbar ──────────────────────────────────────────────────────────────── */
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--color-surface); }
+::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-text-tertiary); }
+
+/* ─── Focus Styles ───────────────────────────────────────────────────────────── */
+
+:focus-visible {
+  outline: 2px solid var(--color-teal-500);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
+/* ─── Keyframes ──────────────────────────────────────────────────────────────── */
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.4; transform: scale(0.8); }
+}
+
+/* ─── Prose (MDX) Overrides ──────────────────────────────────────────────────── */
+
+.prose {
+  --tw-prose-body: var(--color-text-secondary);
+  --tw-prose-headings: var(--color-text-primary);
+  --tw-prose-links: var(--color-teal-500);
+  --tw-prose-bold: var(--color-text-primary);
+  --tw-prose-code: var(--color-text-primary);
+  --tw-prose-pre-bg: var(--color-surface);
+  --tw-prose-hr: var(--color-border);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+/* ─── Utility Classes ────────────────────────────────────────────────────────── */
+
+.label-mono {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.label-micro {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
