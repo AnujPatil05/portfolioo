@@ -45,7 +45,7 @@ export const timeline: TimelineMilestone[] = [
   },
   {
     year: '2026',
-    title: 'Graduating — Seeking Backend Roles',
+    title: 'Graduated — Seeking Backend Roles',
     description: 'B.Tech IT, CGPA 7.7 / 10.0. Currently looking for backend engineering, platform engineering, or AI/ML infrastructure roles.',
     type: 'milestone',
   },
